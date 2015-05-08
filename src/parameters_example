@@ -1,0 +1,13 @@
+num_walks              10000
+num_steps              10
+discrete_steps         0
+seed                   2
+logarithmic_binning    1
+bin_start              0.000001
+bin_end                10000.0
+bin_num                60
+crossings_logarithmic_binning    1
+crossings_bin_start              0.00001
+crossings_bin_end                10.0
+crossings_bin_num                30
+crossings_max                    10

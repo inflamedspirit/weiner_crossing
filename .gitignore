@@ -1,0 +1,12 @@
+*.o
+*.err
+*.out
+*~
+*#
+#*
+*.mod
+stdout/
+stderr/
+parameters/
+bin/
+out*
