@@ -126,7 +126,7 @@ contains
         
     do bin_i = 1,this%bin_number
        write(*,*) bin_i, this%bin_boundaries(bin_i), this%bin_boundaries(bin_i+1), &
-            this%bin_count(bin_i), real(this%bin_count(bin_i))/real(this%hist_count)
+            this%bin_count(bin_i), real(this%bin_count(bin_i))/real(this%bin_boundaries(bin_i+1)-this%bin_boundaries(bin_i))
     end do
     
   end subroutine histogram_print

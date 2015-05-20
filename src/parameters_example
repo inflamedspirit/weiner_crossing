@@ -1,6 +1,7 @@
-num_walks              10000
-num_steps              10
+num_walks              1
+num_steps              100000
 discrete_steps         0
+print_xt_pairs         1
 seed                   2
 logarithmic_binning    1
 bin_start              0.000001

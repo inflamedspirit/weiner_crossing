@@ -30,6 +30,7 @@ program weinercross
   real(wp)               :: t = 0.0_wp
   real(wp)               :: dt, dx
   real(wp)               :: x = 0.0_wp
+  real(wp)               :: area = 0.0_wp
   real(wp)               :: sigma = 1.0_wp
   real(wp)               :: dconst
   integer(kind=int16)    :: i_step,i_walk, num_steps, num_walks, j, k
@@ -74,7 +75,9 @@ program weinercross
   real(wp)        :: bin_start2 = -10.0_wp
   real(wp)        :: bin_end2   = 10.0_wp
   integer         :: bin_num2   = 100
-  
+
+  ! printing x
+  integer         :: print_xt_pairs = 0
     
   ! Input related variables
   character(len=100) :: label, ctrl_file
@@ -121,6 +124,10 @@ program weinercross
         case('discrete_steps')
            discrete_steps = s2i(buff)
            write(0,*) 'Read ', label, ': ', discrete_steps
+
+        case('print_xt_pairs')
+           print_xt_pairs = s2i(buff)
+           write(0,*) 'Read ', label, ': ', print_xt_pairs
 
 !axe it           
         case('crossings_max')
@@ -220,20 +227,32 @@ program weinercross
         end if
         t = t + dt
         x = x + dx
+        area = area + x*dt
                 
         
         ! handle recording crossing intervals 
         if ( ((trap_status .eq. 0) .and. ( x .gt. 0.0_wp )) .or. &
              ((trap_status .eq. 1) .and. ( x .lt. 0.0_wp )) ) then
         
-              ! switch trap state
+           ! switch trap state
            trap_status = mod(trap_status+1,2)
            
            ! store interval
            call hist%add_item(t-trap_timer)         
            
+           ! printing xt pairs:
+           if ( print_xt_pairs .eq. 1 ) then
+              if ( i_step .eq. 1 ) then
+                 write(*,*) ' '
+                 write(*,*) ' '
+                 write(*,*) '"xt_pairs"'
+              end if
+              write(*,*) t-trap_timer, abs(area)
+           end if
+
            ! reset timer
            trap_timer = t
+           area = 0
 
            !
            crossings_num = crossings_num + 1
@@ -258,7 +277,10 @@ program weinercross
   write(0,*) 'histogram entries skipped crossings (no matching bins): ', crossings_hist%bin_skipped
   write(0,*) 'num_crossings: ', crossings_num
   
-  
+
+  write(*,*) ' '
+  write(*,*) ' '
+
   write(*,*) '"cross_interval"'
   call hist%print
   
